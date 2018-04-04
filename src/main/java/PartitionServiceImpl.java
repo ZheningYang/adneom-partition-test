@@ -48,16 +48,22 @@ public class PartitionServiceImpl implements PartitionService {
     private String print(List<Integer> list, Integer factor) {
         StringBuilder sb = new StringBuilder();
 
-        int remains = list.size() % factor;
-        String prefix = "";
-        for (int i = 0; i < list.size() - remains; i += factor) {
-            sb.append(prefix);
-            prefix = ", ";
-            sb.append(list.subList(i, i + factor).toString().replace(" ", ""));
+        try {
+            int remains = list.size() % factor;
+            String prefix = "";
+            for (int i = 0; i < list.size() - remains; i += factor) {
+                sb.append(prefix);
+                prefix = ", ";
+                sb.append(list.subList(i, i + factor).toString().replace(" ", ""));
+            }
+            if (remains > 0) {
+                sb.append(", " + list.subList(Math.max(list.size() - remains, 0), list.size()).toString().replace(" ", ""));
+            }
+
+        }catch (NullPointerException e) {
+            System.out.println("Invalid format..." + e);
         }
-        if (remains > 0) {
-            sb.append(", " + list.subList(Math.max(list.size() - remains, 0), list.size()).toString().replace(" ", ""));
-        }
+
         return "[ " + sb.toString() + " ]";
     }
 }
