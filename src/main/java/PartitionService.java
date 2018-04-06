@@ -1,4 +1,7 @@
+import java.util.List;
+
 public interface PartitionService {
 
-    String process(String input);
+    List<List<Integer>> partition(List<Integer> data, int factor);
+
 }

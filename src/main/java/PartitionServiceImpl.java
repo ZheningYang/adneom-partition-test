@@ -1,8 +1,7 @@
+import com.google.common.collect.Lists;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class PartitionServiceImpl implements PartitionService {
 
@@ -10,60 +9,21 @@ public class PartitionServiceImpl implements PartitionService {
     }
 
     @Override
-    public String process(String input) {
-        input = peeling(input);
-        Integer factor = findFactor(input);
-        List<Integer> list = findData(input);
+    public List<List<Integer>> partition(List<Integer> list, int factor) {
 
-        return print(list, factor);
-    }
+        // guava can safe my time and call it a game, but it's less fun
+//         return Lists.partition(list, factor);
 
-    private String peeling(String input) {
-        Matcher inputMatcher = Pattern.compile("\\((.*?)\\)").matcher(input);
-        while (inputMatcher.find()) {
-            input = inputMatcher.group(1);
+        List<List<Integer>> result = new ArrayList<>();
+
+        int remains = list.size() % factor;
+        for (int i = 0; i < list.size() - remains; i += factor) {
+            result.add(list.subList(i, i + factor));
         }
-        return input;
-    }
-
-    private Integer findFactor(String input) {
-        Integer factor = null;
-        Matcher factorMatcher = Pattern.compile("[0-9]+$").matcher(input);
-        if (factorMatcher.find()) {
-            factor = Integer.parseInt(factorMatcher.group());
-        }
-        return factor;
-    }
-
-    private List<Integer> findData(String input) {
-        List<Integer> list = new ArrayList<>();
-        Matcher numbersMatcher = Pattern.compile("\\[(.*?)\\]").matcher(input);
-        if (numbersMatcher.find()) {
-            Pattern pattern = Pattern.compile("\\s*,\\s*");
-            list = pattern.splitAsStream(numbersMatcher.group(1)).map(Integer::valueOf).collect(Collectors.toList());
-        }
-        return list;
-    }
-
-    private String print(List<Integer> list, Integer factor) {
-        StringBuilder sb = new StringBuilder();
-
-        try {
-            int remains = list.size() % factor;
-            String prefix = "";
-            for (int i = 0; i < list.size() - remains; i += factor) {
-                sb.append(prefix);
-                prefix = ", ";
-                sb.append(list.subList(i, i + factor).toString().replace(" ", ""));
-            }
-            if (remains > 0) {
-                sb.append(", " + list.subList(Math.max(list.size() - remains, 0), list.size()).toString().replace(" ", ""));
-            }
-
-        }catch (NullPointerException e) {
-            System.out.println("Invalid format..." + e);
+        if (remains > 0) {
+            result.add(list.subList(list.size() - remains, list.size()));
         }
 
-        return "[ " + sb.toString() + " ]";
+        return result;
     }
 }
