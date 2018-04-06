@@ -1,12 +1,15 @@
 "# adneom-partition-test" 
 
 
-This is a simple Java test from Adneom.
+This is a simple partition project for Adneom.
 
-First run "mvn clean install" for the project, then use command line to run "adnoem-test-1.0-SNAPSHOT-jar-with-dependencies.jar" (java -jar)
+Use "mvn clean install" to install and the project and run the IT.
 
-You can expect :
-input : partition([1,2,3,4,5], 2)             output : [ [1,2], [3,4], [5] ] 
-input : partition([1,2,3,4,5], 3)             output : [ [1,2,3], [4,5] ] 
-input : partition([1,2,3,4,5], 1)             output: [ [1], [2], [3], [4], [5] ] 
+The service take a list of integer and a partition factor as parameters, and return the partitioned list.
+
+Exemple : 
+
+partition([1,2,3,4,5], 2)   =>    [ [1,2], [3,4], [5] ] 
+partition([1,2,3,4,5], 3)   =>    [ [1,2,3], [4,5] ] 
+partition([1,2,3,4,5], 1)   =>    [ [1], [2], [3], [4], [5] ] 
 
